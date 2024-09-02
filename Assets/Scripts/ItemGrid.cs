@@ -24,7 +24,7 @@ public class ItemGrid : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         Init(gridSizeWidth, gridSizeHeight);
         InventoryItem inventoryItem = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
-        PlaceItem(inventoryItem, 3, 2);
+        PlaceItem(inventoryItem, 1, 1);
     }
 
     private void Init(int width, int height)
@@ -51,12 +51,15 @@ public class ItemGrid : MonoBehaviour
 
         rectTransform.SetParent(this.rectTransform);
 
+        // Store the item in the grid array
         inventoryItemSlot[posX, posY] = inventoryItem;
 
+        // Calculate the correct position using tile size constants
         Vector2 position = new Vector2();
-        position.x = posX * gridSizeHeight + gridSizeWidth / 2;
-        position.y = -(posY * gridSizeHeight + gridSizeHeight / 2);
+        position.x = posX * tileSizeWidth + tileSizeWidth / 2;  // Correctly use tileSizeWidth
+        position.y = -(posY * tileSizeHeight + tileSizeHeight / 2);  // Correctly use tileSizeHeight
 
-        rectTransform.localPosition = position;
+        rectTransform.localPosition = position;  // Set local position within the grid's RectTransform
     }
+
 }
