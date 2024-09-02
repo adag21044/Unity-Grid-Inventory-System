@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1721523104730690866}
   - component: {fileID: 5912209801473566349}
   - component: {fileID: 5303085664239080564}
+  - component: {fileID: -7395305831472852097}
   m_Layer: 5
   m_Name: Item Icon
   m_TagString: Untagged
@@ -88,5 +89,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d3b514eb540d441b8dc0bb86a30a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeWidth: 1
-  sizeHeight: 1
+  itemData: {fileID: 0}
+  onGridPositionX: 0
+  onGridPositionY: 0
+--- !u!114 &-7395305831472852097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346593362317777849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd867303ff219ea48882611c1d9ee0c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 1, g: 0.0633236, b: 0.015686274, a: 1}
