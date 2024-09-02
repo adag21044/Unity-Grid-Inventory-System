@@ -2,13 +2,17 @@ using UnityEngine;
 
 public class InventoryController : MonoBehaviour
 {
-    [SerializeField] ItemGrid selectedItemGrid;
+    [HideInInspector]
+    public ItemGrid selectedItemGrid;
 
     private void Update()
     {
         if(selectedItemGrid == null) return;
 
-        Debug.Log(selectedItemGrid.GetTileGridPosition(Input.mousePosition));
+        if(Input.GetMouseButtonDown(0))
+        {
+            Debug.Log(selectedItemGrid.GetTileGridPosition(Input.mousePosition));
+        }
         
     }
 }

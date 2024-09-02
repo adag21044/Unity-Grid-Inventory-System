@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class GridInteract : MonoBehaviour
+[RequireComponent(typeof(ItemGrid))]
+public class GridInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    InventoryController inventoryController;
+    ItemGrid itemGrid;
+
+    private void Awake()
     {
-        
+        inventoryController = FindObjectOfType<InventoryController>();
+        itemGrid = GetComponent<ItemGrid>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        inventoryController.selectedItemGrid = itemGrid;
     }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        inventoryController.selectedItemGrid = null;
+    }
+
+    
 }
