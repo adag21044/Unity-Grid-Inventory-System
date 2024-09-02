@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ItemGrid : MonoBehaviour
 {
-    const float tileSizeWidth = 32f;
-    const float tileSizeHeight = 32f;
+    public const float tileSizeWidth = 32f;
+    public const float tileSizeHeight = 32f;
 
     InventoryItem[,] inventoryItemSlot;
 
@@ -14,7 +14,7 @@ public class ItemGrid : MonoBehaviour
     [SerializeField] int gridSizeWidth = 20;
     [SerializeField] int gridSizeHeight = 10;
 
-    [SerializeField] GameObject inventoryItemPrefab;
+    
 
     Vector2 positionOnTheGrid = new Vector2();
     Vector2Int tileGridPosition = new Vector2Int();
@@ -24,14 +24,7 @@ public class ItemGrid : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         Init(gridSizeWidth, gridSizeHeight);
         
-        InventoryItem inventoryItem1 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
-        PlaceItem(inventoryItem1, 1, 1);
-        InventoryItem inventoryItem2 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
-        PlaceItem(inventoryItem2, 2, 2);
-        InventoryItem inventoryItem3 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
-        PlaceItem(inventoryItem3, 3, 3);
-        InventoryItem inventoryItem4 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
-        PlaceItem(inventoryItem4, 4, 4);
+        
     }
 
     public InventoryItem PickUpItem(int posX, int posY)
@@ -70,8 +63,8 @@ public class ItemGrid : MonoBehaviour
 
         // Calculate the correct position using tile size constants
         Vector2 position = new Vector2();
-        position.x = posX * tileSizeWidth + tileSizeWidth / 2;  // Correctly use tileSizeWidth
-        position.y = -(posY * tileSizeHeight + tileSizeHeight / 2);  // Correctly use tileSizeHeight
+        position.x = posX * tileSizeWidth + tileSizeWidth * inventoryItem.itemData.width / 2;  // Correctly use tileSizeWidth
+        position.y = -(posY * tileSizeHeight + tileSizeHeight * inventoryItem.itemData.height / 2);  // Correctly use tileSizeHeight
 
         rectTransform.localPosition = position;  // Set local position within the grid's RectTransform
     }
