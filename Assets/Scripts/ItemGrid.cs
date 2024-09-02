@@ -65,48 +65,48 @@ public class ItemGrid : MonoBehaviour
 
     public bool PlaceItem(InventoryItem inventoryItem, int posX, int posY, ref InventoryItem overlapItem)
     {
-        if(BoundryCheck(posX, posY, inventoryItem.itemData.width, inventoryItem.itemData.height) == false) return false;
+        // Sınırları kontrol et
+        if (BoundryCheck(posX, posY, inventoryItem.itemData.width, inventoryItem.itemData.height) == false) 
+            return false;
 
-        if(OverlapCheck(posX, posY, inventoryItem.itemData.width, inventoryItem.itemData.height, ref overlapItem) == false) 
+        // Üst üste binme durumunu kontrol et
+        if (OverlapCheck(posX, posY, inventoryItem.itemData.width, inventoryItem.itemData.height, ref overlapItem) == false) 
         {
             overlapItem = null;
             return false;
         }
 
-        if(overlapItem != null)
+        // Eğer overlapItem null değilse, eski referansları temizle
+        if (overlapItem != null)
         {
             CleanGridReference(overlapItem);
         }
 
+        // Grid'e yerleştir
         RectTransform rectTransform = inventoryItem.GetComponent<RectTransform>();
-
         rectTransform.SetParent(this.rectTransform);
 
-        for(int x = 0; x < inventoryItem.itemData.width; x++)
+        for (int x = 0; x < inventoryItem.itemData.width; x++)
         {
-            for(int y = 0; y < inventoryItem.itemData.height; y++)
+            for (int y = 0; y < inventoryItem.itemData.height; y++)
             {
-                if(inventoryItemSlot[posX + x, posY + y] != null)
-                {
-                    // Store the item in the grid array
-                    inventoryItemSlot[posX + x, posY + y] = inventoryItem;
-                }
+                inventoryItemSlot[posX + x, posY + y] = inventoryItem;
             }
         }
-        
 
         inventoryItem.onGridPositionX = posX;
         inventoryItem.onGridPositionY = posY;
 
-        // Calculate the correct position using tile size constants
+        // Nesnenin grid üzerindeki pozisyonunu hesapla
         Vector2 position = new Vector2();
-        position.x = posX * tileSizeWidth + tileSizeWidth * inventoryItem.itemData.width / 2;  // Correctly use tileSizeWidth
-        position.y = -(posY * tileSizeHeight + tileSizeHeight * inventoryItem.itemData.height / 2);  // Correctly use tileSizeHeight
+        position.x = posX * tileSizeWidth + tileSizeWidth * inventoryItem.itemData.width / 2;
+        position.y = -(posY * tileSizeHeight + tileSizeHeight * inventoryItem.itemData.height / 2);
 
-        rectTransform.localPosition = position;  // Set local position within the grid's RectTransform
+        rectTransform.localPosition = position;
 
         return true;
     }
+
 
     bool PositionCheck(int posX, int posY)
     {
@@ -135,28 +135,31 @@ public class ItemGrid : MonoBehaviour
         return true;
     }
 
-    private bool OverlapCheck(int posX, int posY, int width, int height, ref InventoryItem overlapTime)
+    private bool OverlapCheck(int posX, int posY, int width, int height, ref InventoryItem overlapItem)
     {
-        for(int x = 0; x < width; x++)
+        for (int x = 0; x < width; x++)
         {
-            for(int y = 0; y < height; y++)
+            for (int y = 0; y < height; y++)
             {
-                if(inventoryItemSlot[posX + x, posY + y] != null)
+                // Eğer gridde bu pozisyonda başka bir item varsa
+                if (inventoryItemSlot[posX + x, posY + y] != null)
                 {
-                    if(overlapTime == null) overlapTime = inventoryItemSlot[posX + x, posY + y];
+                    if (overlapItem == null) 
+                        overlapItem = inventoryItemSlot[posX + x, posY + y];
                     else
                     {
-                        if(overlapTime != inventoryItemSlot[posX + x, posY + y])
+                        if (overlapItem != inventoryItemSlot[posX + x, posY + y])
                         {
-                            return false;
+                            return false; // Farklı bir item ile çakışma var
                         }
-                    } 
+                    }
                 }
             }
         }
 
-        return true;
+        return true; // Çakışma yok veya sadece aynı item ile çakışma var
     }
+
 
     // Function to clean grid references for the given item
     private void CleanGridReference(InventoryItem item)
