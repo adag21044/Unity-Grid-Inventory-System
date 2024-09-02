@@ -23,8 +23,22 @@ public class ItemGrid : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         Init(gridSizeWidth, gridSizeHeight);
-        InventoryItem inventoryItem = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
-        PlaceItem(inventoryItem, 1, 1);
+        
+        InventoryItem inventoryItem1 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
+        PlaceItem(inventoryItem1, 1, 1);
+        InventoryItem inventoryItem2 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
+        PlaceItem(inventoryItem2, 2, 2);
+        InventoryItem inventoryItem3 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
+        PlaceItem(inventoryItem3, 3, 3);
+        InventoryItem inventoryItem4 = Instantiate(inventoryItemPrefab).GetComponent<InventoryItem>();
+        PlaceItem(inventoryItem4, 4, 4);
+    }
+
+    public InventoryItem PickUpItem(int posX, int posY)
+    {
+        InventoryItem toReturn = inventoryItemSlot[posX, posY];
+        inventoryItemSlot[posX, posY] = null;
+        return toReturn;
     }
 
     private void Init(int width, int height)
