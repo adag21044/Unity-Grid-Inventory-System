@@ -476,6 +476,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f4b9aa7ed33d04da57398bb993a5b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridSizeWidth: 20
+  gridSizeHeight: 10
+  inventoryItemPrefab: {fileID: 2346593362317777849, guid: 072b8b5deb5c0114a9d013cfa991a5a0, type: 3}
 --- !u!114 &955362454
 MonoBehaviour:
   m_ObjectHideFlags: 0
