@@ -6,7 +6,8 @@ public class InventoryController : MonoBehaviour
     [HideInInspector]
     public ItemGrid selectedItemGrid;
 
-    InventoryItem selectedItem; 
+    InventoryItem selectedItem;
+    InventoryItem overlapItem; 
     RectTransform rectTransform;
 
     [SerializeField] List<ItemData> items;
@@ -84,11 +85,22 @@ public class InventoryController : MonoBehaviour
     // Function to place the selected item on the grid
     private void PlaceSelectedItem(Vector2Int tileGridPosition)
     {
-        // Place the selected item on the grid at the clicked position
-        selectedItemGrid.PlaceItem(selectedItem, tileGridPosition.x, tileGridPosition.y);
+        
+        bool complete = selectedItemGrid.PlaceItem(selectedItem, tileGridPosition.x, tileGridPosition.y, ref overlapItem);
 
-        // Reset the selected item and rectTransform after placing
-        selectedItem = null;
-        rectTransform = null;
+        if(complete)
+        {
+            // Reset the selected item and rectTransform after placing
+            selectedItem = null;
+            rectTransform = null;
+
+            if(overlapItem != null)
+            {
+                selectedItem = overlapItem;
+                overlapItem = null;
+                rectTransform = selectedItem.GetComponent<RectTransform>();
+            }
+        }
+        
     }
 }

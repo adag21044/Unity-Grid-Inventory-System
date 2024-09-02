@@ -63,8 +63,21 @@ public class ItemGrid : MonoBehaviour
         return tileGridPosition;
     }
 
-    public void PlaceItem(InventoryItem inventoryItem, int posX, int posY)
+    public bool PlaceItem(InventoryItem inventoryItem, int posX, int posY, ref InventoryItem overlapItem)
     {
+        if(BoundryCheck(posX, posY, inventoryItem.itemData.width, inventoryItem.itemData.height) == false) return false;
+
+        if(OverlapCheck(posX, posY, inventoryItem.itemData.width, inventoryItem.itemData.height, ref overlapItem) == false) 
+        {
+            overlapItem = null;
+            return false;
+        }
+
+        if(overlapItem != null)
+        {
+            CleanGridReference(overlapItem);
+        }
+
         RectTransform rectTransform = inventoryItem.GetComponent<RectTransform>();
 
         rectTransform.SetParent(this.rectTransform);
@@ -91,6 +104,72 @@ public class ItemGrid : MonoBehaviour
         position.y = -(posY * tileSizeHeight + tileSizeHeight * inventoryItem.itemData.height / 2);  // Correctly use tileSizeHeight
 
         rectTransform.localPosition = position;  // Set local position within the grid's RectTransform
+
+        return true;
     }
+
+    bool PositionCheck(int posX, int posY)
+    {
+        if(posX < 0 || posY < 0)
+        {
+            return false;
+        }
+
+        if(posX >= gridSizeWidth || posY >= gridSizeHeight)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool BoundryCheck(int posX, int posY, int width, int height)
+    {
+        if(PositionCheck(posX, posY) == false) return false;
+
+        posX += width - 1;
+        posY += height - 1;
+
+        if(PositionCheck(posX, posY) == false) return false;
+
+        return true;
+    }
+
+    private bool OverlapCheck(int posX, int posY, int width, int height, ref InventoryItem overlapTime)
+    {
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                if(inventoryItemSlot[posX + x, posY + y] != null)
+                {
+                    if(overlapTime == null) overlapTime = inventoryItemSlot[posX + x, posY + y];
+                    else
+                    {
+                        if(overlapTime != inventoryItemSlot[posX + x, posY + y])
+                        {
+                            return false;
+                        }
+                    } 
+                }
+            }
+        }
+
+        return true;
+    }
+
+    // Function to clean grid references for the given item
+    private void CleanGridReference(InventoryItem item)
+    {
+        for (int ix = 0; ix < item.itemData.width; ix++)
+        {
+            for (int iy = 0; iy < item.itemData.height; iy++)
+            {
+                inventoryItemSlot[item.onGridPositionX + ix, item.onGridPositionY + iy] = null;
+            }
+        }
+    }
+
+    
 
 }
