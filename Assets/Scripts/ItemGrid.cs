@@ -23,14 +23,25 @@ public class ItemGrid : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         Init(gridSizeWidth, gridSizeHeight);
-        
-        
+  
     }
 
     public InventoryItem PickUpItem(int posX, int posY)
     {
         InventoryItem toReturn = inventoryItemSlot[posX, posY];
-        inventoryItemSlot[posX, posY] = null;
+
+        if(toReturn == null) return null;
+        
+
+        for(int ix = 0; ix < toReturn.itemData.width; ix++)
+        {
+            for(int iy = 0; iy < toReturn.itemData.height; iy++)
+            {
+                inventoryItemSlot[toReturn.onGridPositionX + ix, toReturn.onGridPositionY + iy] = null;
+            }
+        }
+
+        
         return toReturn;
     }
 
@@ -58,8 +69,21 @@ public class ItemGrid : MonoBehaviour
 
         rectTransform.SetParent(this.rectTransform);
 
-        // Store the item in the grid array
-        inventoryItemSlot[posX, posY] = inventoryItem;
+        for(int x = 0; x < inventoryItem.itemData.width; x++)
+        {
+            for(int y = 0; y < inventoryItem.itemData.height; y++)
+            {
+                if(inventoryItemSlot[posX + x, posY + y] != null)
+                {
+                    // Store the item in the grid array
+                    inventoryItemSlot[posX + x, posY + y] = inventoryItem;
+                }
+            }
+        }
+        
+
+        inventoryItem.onGridPositionX = posX;
+        inventoryItem.onGridPositionY = posY;
 
         // Calculate the correct position using tile size constants
         Vector2 position = new Vector2();
